@@ -7,7 +7,209 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+body, #root, .App{
+  width: 100vw;
+  height: 100vh;
+}
+
+
+.header{
+  height: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.list_day{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.day{
+  display:flex;
+  height: 70%;
+  box-sizing: border-box;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.dayName{
+  position: absolute;
+  top: 11rem;
+  left: 16rem;
+}
+
+.del_radio{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+ .create_word, .create_day{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+table{
+  border-collapse: collapse;
+  width: 70vw;
+}
+table td{
+  width: 25%;
+  height: 70px;
+  border: 1px solid #ccc;
+  text-align: center;
+  font-size: 26px;
+}
+
+table td:first-child {
+  width: 8%;
+}
+
+button{
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px; 
+  background-color: cornflowerblue;
+  font-weight: 800;
+  color: white;
+  cursor: pointer;
+}
+
+.btn_del {
+  padding: 6px 12px;
+  border-radius: 6px;
+  background-color: pink;
+  font-weight: 800;
+}
+
+.off{
+  background-color: #e8e8e8;
+  color: #ccc;
+}
+
+.off button {
+  opacity: 0.8;
+}
+
+ul {
+  list-style: none;
+  display: flex;
+}
+
+ ul a {
+  color: white;
+  text-decoration: none;
+  font-size: 2rem;
+  background-color: cornflowerblue;
+  border-radius: 6px;
+  margin-right: 1em;
+}
+
+label {
+  font-size: 1.5em;
+  display: block;
+  margin-top: 0.5em;
+}
+
+
+input {
+  width: 15em;
+  height: 3em;
+  margin: 0.5em;
+  font-size: 1em;
+  font-weight: 500;
+  border-color: #444;
+  border-radius: 6px;
+}
+
+input:focus {
+  background-color: #b8dff8;
+}
+
+select {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15em;
+  height: 3em;
+  text-align: center;
+  font-size: 1em;
+  font-weight: 600;
+  color: #444;
+  background-color: #fff;
+  margin-left: 0.5em;
+  border-radius: 6px;
+}
+
+select option {
+  font-weight: 600;
+  font-size: 1.2em;
+  background-color: cornflowerblue;
+  color: white;
+  border-radius: none;
+}
+
+
+
+select:focus { 
+  border: 1px solid black;
+  outline: none;
+  }
+
+
+
+form button {
+  margin-top: 1em;
+}
+
+input[type="checkbox"] {
+  width: 1.5rem;
+  height: 20px;
+}
+
+a {
+  color: #2c3979;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+[type="radio"]{
+  border:max(2px, 0.1em) solid red;
+  width: 0.5em;
+  height: 0.5em;
+}
+[type="radio"]:checked{
+  border: 0.4em solid tomato;
+}
+
+.direction{
+  height: 100%;
+  position: relative;
+}
+
+.direction_left, .direction_right{
+  position: absolute;
+  padding: 0;
+  width: 50px;
+  height: 30px;
+  bottom: 2rem;
+}
+
+.direction_left{
+  right: 40rem;
+}
+.direction_right{
+  left: 40rem;
 }
