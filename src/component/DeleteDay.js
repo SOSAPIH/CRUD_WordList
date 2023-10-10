@@ -23,7 +23,6 @@ export default function DeleteDay() {
       alert('삭제할 요일을 선택하세요.');
       return;
     }
-debugger
     // checked 배열에 있는 고유 ID를 사용하여 Firestore에서 해당 문서를 삭제
     checked.forEach(async (id) => {
       try {
@@ -46,7 +45,7 @@ debugger
 
     days.forEach((day) => {
       
-      if(day.day == dayId) {
+      if(day.day === Number(dayId)) {
         dayId = day.docId; 
       }
     })
