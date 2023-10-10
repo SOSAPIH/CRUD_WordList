@@ -5,7 +5,7 @@ export default function Header() {
   return (
     <div className="header">
       <h1>
-        <Link to="/">토익 영단어(고급)</Link>
+        <Link to="/">영단어 외우기</Link>
       </h1>
       <div className="menu">
         <Link to="/create_word" className="link" style={{fontSize: '1.2rem'}}>

@@ -1,52 +1,76 @@
-import useFetch from '../Hooks/useFetch';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {db} from '../db/fbase';
+import {collection, getDocs, doc, deleteDoc } from 'firebase/firestore';
 
 export default function DeleteDay() {
-  const days = useFetch(`http://localhost:4000/days`);  
+  const [days, setDays] = useState([]);
   const [checked, setChecked] = useState([]); // 1. 배열로 초기화
   const navigate = useNavigate();
-
-  function onSubmit(e) {
-    e.preventDefault();
-    if (checked.length === 0){
+  
+  useEffect(()=> {
+    const getDays = async () => {
+      const daysCollection = collection(db, 'days');
+      const daysSnapshot = await getDocs(daysCollection);
+        const getDays = daysSnapshot.docs.map(doc => ({ docId: doc.id, id: doc.data().id, ...doc.data() }));
+      setDays(getDays);
+    }
+    getDays();
+  }, []);
+  
+  const onSubmit = async () => {
+    if (checked.length === 0) {
       alert('삭제할 요일을 선택하세요.');
       return;
     }
-    Promise.all(
-      checked.map(check => (
-        fetch(`http://localhost:4000/days/${check}`, {
-          method: 'DELETE',
-        })  
-      ))
-    ).then(res => {
-      console.log('res', res);
-      const deleteResult = res.map(res => res.ok);
-      console.log('deleteResult:', deleteResult);
-      if (deleteResult.every(result => result === true)) {
-        alert('선택한 요일을 모두 삭제하였습니다.');
-        navigate('/');
-      } else {
-        alert('요일 삭제에 실패하였습니다.');
+debugger
+    // checked 배열에 있는 고유 ID를 사용하여 Firestore에서 해당 문서를 삭제
+    checked.forEach(async (id) => {
+      try {
+        await deleteDoc(doc(db, 'days', id));
+        // 삭제 성공
+        console.log(`문서 ID ${id}가 삭제되었습니다.`);
+      } catch (error) {
+        // 삭제 중 오류 발생
+        console.error(`문서 ID ${id}를 삭제하는 동안 오류가 발생했습니다:`, error);
       }
-    })
+    });
+  
+    alert('선택한 요일을 모두 삭제하였습니다.');
+    navigate('/');
   }
   
-  function onChange(e) {
-    const value = e.target.value;
-    if (e.target.checked) { //checked
-      setChecked(prev => [...prev, value]); // 2. 배열로 업데이트
+  const onChange = (e) => {
+    let dayId = e.target.value; // day.id를 가져옴
+    const isChecked = e.target.checked;
+
+    days.forEach((day) => {
+      
+      if(day.day == dayId) {
+        dayId = day.docId; 
+      }
+    })
+    // days돌면서 dayId와비교 하면서 checked에 추가
+    console.log("days:::",days)
+  
+    console.log('dayId:', dayId);
+    console.log('isChecked:', isChecked);
+    if (isChecked) { // checked
+
+      setChecked((prev) => [...prev, dayId]);
+      console.log(checked);
     } else { // not checked
-      setChecked(prev => prev.filter(item => item !== value));
+      setChecked((prev) => prev.filter((id) => id !== dayId));
+      console.log(checked);
     }
   }
   
   return (<>
     <form onSubmit={onSubmit} className='del_radio'>
-      {days.map(day => {
+      {days.sort((a,b)=> a.day - b.day).map(day => {
         return <label key={day.id}>
           <span key={day.id+day.day} className='inputName'>{day.day}</span>
-          <input type="checkbox" key={day.id} name='day' value={day.day} onChange={onChange} checked={checked.includes(`${day.day}`)} />
+          <input type="checkbox" key={day.id} name='day' value={day.id} onChange={onChange}/>
         </label>
       })}
       <div>

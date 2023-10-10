@@ -213,3 +213,12 @@ a {
 .direction_right{
   left: 40rem;
 }
+
+.wait{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+

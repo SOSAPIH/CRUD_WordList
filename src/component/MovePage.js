@@ -1,11 +1,23 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import useFetch from '../Hooks/useFetch';
+import { useState, useEffect} from 'react';
+import { db } from '../db/fbase';
+import { collection, getDocs} from 'firebase/firestore';
 
 export default function MovePage() {
   const navigate = useNavigate();
   const { day } = useParams(); // 반환값은 문자열
-  const days = useFetch('http://localhost:4000/days');
+  const [days, setDays] = useState([]);
   
+  useEffect(()=> {
+    const getDays = async () => {
+      const daysCollection = collection(db, 'days');
+      const daysSnapshot = await getDocs(daysCollection);
+      let daysData = daysSnapshot.docs.map(doc => doc.data());
+      setDays(daysData);
+    }
+    getDays();
+  },[])  
+
   function moveBack() {
     navigate(`/day/${Number(day)-1}`, { replace: true });
   }
