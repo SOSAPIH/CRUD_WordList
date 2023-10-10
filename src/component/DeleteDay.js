@@ -12,8 +12,9 @@ export default function DeleteDay() {
     const getDays = async () => {
       const daysCollection = collection(db, 'days');
       const daysSnapshot = await getDocs(daysCollection);
-        const getDays = daysSnapshot.docs.map(doc => ({ docId: doc.id, id: doc.data().id, ...doc.data() }));
+      const getDays = daysSnapshot.docs.map(doc => ({ docId: doc.id, id: doc.data().id, ...doc.data() }));
       setDays(getDays);
+      console.log('getDays: ',getDays);
     }
     getDays();
   }, []);
@@ -44,18 +45,16 @@ export default function DeleteDay() {
     const isChecked = e.target.checked;
 
     days.forEach((day) => {
-      
-      if(Number(day.day) === dayId) {
-        dayId = day.docId; 
+      if(day.day === Number(dayId)) {
+        dayId = day.docId;
+        console.log('이게 중요해::', dayId);
       }
     })
     // days돌면서 dayId와비교 하면서 checked에 추가
     console.log("days:::",days)
   
     console.log('dayId:', dayId);
-    console.log('isChecked:', isChecked);
     if (isChecked) { // checked
-
       setChecked((prev) => [...prev, dayId]);
       console.log(checked);
     } else { // not checked
