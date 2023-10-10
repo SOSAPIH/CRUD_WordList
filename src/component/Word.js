@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { db } from '../db/fbase';
-import { collection, doc, query, where, updateDoc, deleteDoc, getDocs } from 'firebase/firestore';
+import { collection, query, where, updateDoc, deleteDoc, getDocs } from 'firebase/firestore';
 
 export default function Word({ word: 단어, day: dayProp }) {
   const [word, setWord] = useState(단어);
