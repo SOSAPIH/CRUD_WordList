@@ -45,7 +45,7 @@ export default function DeleteDay() {
 
     days.forEach((day) => {
       
-      if(day.day === Number(dayId)) {
+      if(Number(day.day) === dayId) {
         dayId = day.docId; 
       }
     })
