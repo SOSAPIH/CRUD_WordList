@@ -9,7 +9,7 @@ export default function Word({ word: 단어, day: dayProp }) {
   
   async function changeIsDone() {
     if (word && word.eng) {
-      const wordRef = doc(db, 'words', word.eng);
+      // const wordRef = doc(db, 'words', word.eng);
       const querySnapshot = await getDocs(query(collection(db, 'words'), where('day', '==', dayProp)));
       querySnapshot.forEach(async (doc) => {
         await updateDoc(doc.ref, { isDone: !isDone });
