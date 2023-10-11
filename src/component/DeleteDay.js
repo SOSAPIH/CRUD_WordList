@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {db} from '../db/fbase';
 import {collection, getDocs, doc, deleteDoc } from 'firebase/firestore';
@@ -37,7 +37,7 @@ export default function DeleteDay() {
     navigate('/');
   }
   
-  const onChange = useMemo((e)=> {
+  const onChange = useCallback((e)=> {
     let dayId = e.target.value; // day.id를 가져옴
     const isChecked = e.target.checked;
 
@@ -52,7 +52,7 @@ export default function DeleteDay() {
     } else { // not checked
       setChecked((prev) => prev.filter((id) => id !== dayId));
     }
-  },[]);
+  },[days]);
   
   
   const sortedDays = useMemo(() => {
