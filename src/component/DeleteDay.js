@@ -52,7 +52,7 @@ export default function DeleteDay() {
     } else { // not checked
       setChecked((prev) => prev.filter((id) => id !== dayId));
     }
-  },[onChange]);
+  },[]);
   
   
   const sortedDays = useMemo(() => {
