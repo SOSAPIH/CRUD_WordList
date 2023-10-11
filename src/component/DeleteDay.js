@@ -37,7 +37,7 @@ export default function DeleteDay() {
     navigate('/');
   }
   
-  const onChange = useMemo(()=> {
+  const onChange = useMemo((e)=> {
     let dayId = e.target.value; // day.id를 가져옴
     const isChecked = e.target.checked;
 
@@ -46,7 +46,6 @@ export default function DeleteDay() {
         dayId = day.docId;
       }
     })
-    // days돌면서 dayId와비교 하면서 checked에 추가
   
     if (isChecked) { // checked
       setChecked((prev) => [...prev, dayId]);
