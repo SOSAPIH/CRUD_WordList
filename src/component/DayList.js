@@ -1,4 +1,4 @@
-import { useState, useEffect} from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { db } from '../db/fbase';
 import { collection, getDocs} from 'firebase/firestore';
@@ -8,6 +8,16 @@ import { collection, getDocs} from 'firebase/firestore';
 export default function DayList() {
   const [days, setDays] = useState([]);
 
+  const mappedDays = useMemo(() => {
+    return days.map(day => (
+      <li key={day.id}>
+        <Link to={`/day/${day.day}`}>Day {day.day}</Link>
+      </li>
+    ));
+  }, [days]);
+
+  const hasNoDays = useMemo(() => days.length === 0, [days]);
+  
   useEffect(()=> {
     const getDays = async () => {
       const daysCollection = collection(db, 'days');
@@ -16,18 +26,17 @@ export default function DayList() {
       daysData = daysData.sort((a,b)=> a.day - b.day);
       setDays(daysData);
     }
-    
     getDays();
   }, [days]);
   
-  if (days.length === 0) {
-    return <span className="wait">Wait...</span>
-  }
  
   return (
-    <ul className="list_day">
-      {days.map(day => (<li key={day.id}>
-        <Link to={`/day/${day.day}`}>Day {day.day}</Link>
-      </li>))}
-    </ul>)
+    <div>
+      {hasNoDays ? <span className="wait">Wait...</span> : (
+        <ul className="list_day">
+          {mappedDays}
+        </ul>
+      )}
+    </div>
+  );
 }

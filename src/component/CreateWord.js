@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {db} from '../db/fbase';
 import { collection, addDoc, getDocs} from 'firebase/firestore';
@@ -15,6 +15,10 @@ export default function CreateWord() {
   const korRef = useRef(null);
   const dayRef = useRef(null);
   
+  const sortedDays = useMemo(() => {
+    return days.sort((a, b) => a.day - b.day);
+  }, [days]);
+
   useEffect(() => {
     const getDays = async () => {
       const daysCollection = collection(db, "days");
@@ -50,15 +54,19 @@ export default function CreateWord() {
     setIsLoading(false);
   }
 
-  const handleChangeEng = (e) => {
+  
+
+  const handleChangeEng = useCallback((e) => {
     setInputEng(e.target.value);
-  }
-  const handleChangeKor = (e) => {
+  }, []);
+  
+  const handleChangeKor = useCallback((e) => {
     setInputKor(e.target.value);
-  }
-  const handleChange = e => {
+  }, []);
+  
+  const handleChange = useCallback((e) => {
     setSelectVal(e.target.value);
-  }
+  }, []);
   
   return (<form onSubmit={onSubmit} className="create_word">
     <div className="input_area">
@@ -73,9 +81,9 @@ export default function CreateWord() {
       <label>Day</label>
       <select ref={dayRef} value={selectVal} onChange={handleChange}>
         <option value="">--- 선택하세요 ---</option>
-        {days.sort((a, b) => a.day - b.day).map(day => {
-          return <option key={day.eng} value={day.day}>{day.day}</option>
-          })}
+        {sortedDays.map(day => {
+  return <option key={day.eng} value={day.day}>{day.day}</option>
+})}
       </select>
     </div>
     <button style={{opacity: isLoading? 0.3 : 0.7}}>{isLoading? "저장 중..." : "저장"}</button>

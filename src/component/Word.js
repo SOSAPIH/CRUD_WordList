@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { db } from '../db/fbase';
 import { collection, query, where, updateDoc, deleteDoc, getDocs } from 'firebase/firestore';
 
@@ -6,38 +6,35 @@ export default function Word({ word: 단어, day: dayProp }) {
   const [word, setWord] = useState(단어);
   const [isShow, setIsShow] = useState(false);
   const [isDone, setIsDone] = useState(word.isDone);
-  
-  async function changeIsDone() {
+
+  const changeIsDone = useCallback(async () => {
     if (word && word.eng) {
-      // const wordRef = doc(db, 'words', word.eng);
       const querySnapshot = await getDocs(query(collection(db, 'words'), where('day', '==', dayProp)));
       querySnapshot.forEach(async (doc) => {
-        await updateDoc(doc.ref, { isDone: !isDone });
+        await updateDoc(doc.ref, { isDone: (prevIsDone) => !prevIsDone });
       });
-      setIsDone(!isDone);
-    } else {
-      console.log('word:', word);
+      setIsDone((prevIsDone) => !prevIsDone);
     }
-  }
+  }, [dayProp, isDone, word]);
 
-  async function del() {
+  const del = useCallback(async () => {
     if (window.confirm('삭제하시겠습니까?')) {
       const querySnapshot = await getDocs(query(collection(db, 'words')));
       querySnapshot.forEach(async (doc) => {
-        if(doc.data().eng === word.eng){
-          await(deleteDoc(doc.ref));
-          setWord({eng: 0});
+        if (doc.data().eng === word.eng) {
+          await deleteDoc(doc.ref);
+          setWord({ eng: 0 });
         }
-      })
+      });
     }
-  }
+  }, [word]);
+
+  const toggleShow = useCallback(() => {
+    setIsShow((prevIsShow) => !prevIsShow);
+  }, [isShow]);
 
   if (word.eng === 0) {
     return null;
-  }
-
-  function toggleShow() {
-    setIsShow(!isShow);
   }
 
   return (
@@ -50,5 +47,5 @@ export default function Word({ word: 단어, day: dayProp }) {
         <td><button className="btn_del" onClick={del}>삭제</button></td>
       </tr>
     </>
-  )
+  );
 }
