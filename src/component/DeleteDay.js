@@ -37,8 +37,7 @@ export default function DeleteDay() {
     navigate('/');
   }
   
-  
-  const onChange = (e) => {
+  const onChange = useMemo(()=> {
     let dayId = e.target.value; // day.id를 가져옴
     const isChecked = e.target.checked;
 
@@ -54,7 +53,8 @@ export default function DeleteDay() {
     } else { // not checked
       setChecked((prev) => prev.filter((id) => id !== dayId));
     }
-  }
+  },[onChange]);
+  
   
   const sortedDays = useMemo(() => {
     return days.sort((a, b) => a.day - b.day).map(day => (

@@ -31,7 +31,7 @@ export default function Word({ word: 단어, day: dayProp }) {
 
   const toggleShow = useCallback(() => {
     setIsShow((prevIsShow) => !prevIsShow);
-  }, [isShow]);
+  }, []);
 
   if (word.eng === 0) {
     return null;
